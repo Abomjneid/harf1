@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موسوعة الحروف العربية التفاعلية 28 - فرسان الضاد</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fef08a',
+                            500: '#eab308',
+                            600: '#ca8a04',
+                            700: '#a16207',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- الخطوط العربية Cairo و Tajawal -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Cairo', 'Tajawal', sans-serif;
+        }
+        body {
+            line-height: 2.3;
+            background-color: #fefce8;
+        }
+        .diacritics-lead {
+            line-height: 2.3 !important;
+        }
+        .letter-hover-card {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .letter-hover-card:hover {
+            transform: translateY(-4px) scale(1.05);
+        }
+        @keyframes bubbleBounce {
+            0% { transform: scale(0.3); opacity: 0; }
+            60% { transform: scale(1.15); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .bubble-animate {
+            animation: bubbleBounce 0.4s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-amber-100 via-yellow-50 to-orange-100 min-h-screen text-slate-800 pb-16">
+
+    <!-- شريط الملاحة الرئيسي بين أقسام المنصة -->
+    <header class="bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b-4 border-amber-500 shadow-md">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <span class="text-3xl">📚</span>
+                <div>
+                    <h1 class="text-xl font-black text-amber-900 leading-tight">منصة فرسان الضاد التفاعلية</h1>
+                    <p class="text-xs font-semibold text-amber-700">موسوعة الحروف الهجائية الـ 28 والأمثلة الصوتية</p>
+                </div>
+            </div>
+            <nav class="flex flex-wrap items-center gap-2">
+                <a href="reading.html" class="px-4 py-2 bg-sky-500 text-white rounded-xl font-bold shadow-md hover:bg-sky-600 transition border-b-4 border-sky-700">📖 بطاقات القراءة (100 كلمة)</a>
+                <a href="index.html" class="px-4 py-2 bg-emerald-500 text-white rounded-xl font-bold shadow-md hover:bg-emerald-600 transition border-b-4 border-emerald-700">📝 اختبار القواعد (20 قاعدة)</a>
+                <a href="abc.html" class="px-4 py-2 bg-amber-600 text-white rounded-xl font-bold shadow-md hover:bg-amber-700 transition border-b-4 border-amber-800">📚 موسوعة الحروف الـ 28</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 mt-8">
+        
+        <!-- عنوان القسم الرئيسي -->
+        <div class="bg-white rounded-3xl p-6 shadow-xl border-4 border-amber-400 mb-8 text-center relative overflow-hidden">
+            <h2 class="text-3xl md:text-4xl font-black text-amber-800 mb-2 leading-relaxed diacritics-lead">📚 قِطَارُ الحُرُوفِ الهِجَائِيَّةِ الشَّامِلِ التَّفَاعُلِيِّ 📚</h2>
+            <p class="text-lg font-bold text-slate-600 leading-relaxed diacritics-lead max-w-3xl mx-auto">
+                انقر على أي حرف من الحروف الـ 28 في الأسفل لتشاهد الكلمات التوضيحية وتتصفح أشكال الوصل في **أول الكلمة، وسطها، وآخرها** مع التفكيك الصوتي والتفاعلي!
+            </p>
+        </div>
+
+        <!-- شبكة عرض الحروف الـ 28 كاملة (28 Arabic Alphabet Grid) -->
+        <div class="bg-white rounded-3xl p-6 shadow-xl border-4 border-amber-400 mb-8">
+            <h3 class="text-xl font-black text-amber-900 mb-4 flex items-center gap-2 border-b border-amber-100 pb-2">
+                <span>🎯 اخْتَرْ حَرْفًا لِتَكْشِفَ أَمْثِلَتَهُ وَأَشْكَالَهُ:</span>
+            </h3>
+            <div id="alphabet-cards-grid" class="grid grid-cols-4 sm:grid-cols-7 md:grid-cols-7 lg:grid-cols-14 gap-3">
+                <!-- توليد بطاقات الحروف الـ 28 -->
+            </div>
+        </div>
+
+        <!-- لوحة عرض تفاصيل الحرف المختار والكلمات والتفكيك (Selected Letter Info Panel) -->
+        <div id="letter-detail-panel" class="bg-white rounded-3xl p-6 shadow-xl border-4 border-emerald-400 relative overflow-hidden">
+            <div class="flex flex-wrap items-center justify-between gap-4 mb-6 pb-4 border-b-2 border-dashed border-emerald-200">
+                <div class="flex items-center gap-4">
+                    <div id="selected-letter-badge" class="w-16 h-16 bg-gradient-to-br from-emerald-400 to-teal-600 text-white rounded-2xl flex items-center justify-center text-4xl font-black shadow-lg border-b-4 border-emerald-700 diacritics-lead">
+                        أ
+                    </div>
+                    <div>
+                        <h3 id="selected-letter-heading" class="text-2xl font-black text-emerald-900">حَرْفُ الأَلِفِ ( أ )</h3>
+                        <p id="selected-letter-positions" class="text-sm font-bold text-emerald-700">أشكال الكتابة: أ | ـأ | ـأ</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button onclick="speakSelectedLetter()" class="px-5 py-2.5 bg-gradient-to-b from-amber-400 to-amber-500 text-white font-black rounded-xl shadow-lg border-b-4 border-amber-600 hover:brightness-105 active:scale-95 transition flex items-center gap-2 text-sm">
+                        <span>انطق الحرف والكلمة</span>
+                        <span>🔊</span>
+                    </button>
+                    <button onclick="cycleNextExample()" class="px-4 py-2.5 bg-emerald-600 text-white font-black rounded-xl shadow-lg border-b-4 border-emerald-800 hover:bg-emerald-700 active:scale-95 transition text-sm">
+                        🔄 مثال آخر
+                    </button>
+                </div>
+            </div>
+
+            <!-- عرض الكلمة والشرح وتفكيك الحروف -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                <!-- جانب الكلمة الكبيرة والموضع -->
+                <div class="text-center bg-emerald-50/70 p-6 rounded-3xl border-2 border-emerald-200">
+                    <span id="pos-badge-tag" class="inline-block px-4 py-1.5 bg-emerald-600 text-white font-black rounded-full text-xs mb-3 shadow">
+                        موضع الحرف: أول الكلمة منفصل
+                    </span>
+                    <h4 id="display-word-text" onclick="splitDisplayWord()" class="text-6xl md:text-7xl font-black text-emerald-800 diacritics-lead py-3 cursor-pointer hover:scale-105 transition select-none">
+                        أَسَدٌ
+                    </h4>
+                    <p class="text-xs font-bold text-slate-500 mt-1">انقر على الكلمة لتستعرض فقاعات الحروف المفككة ✂️</p>
+                </div>
+
+                <!-- جانب التوضيح والفقاعات -->
+                <div class="space-y-4">
+                    <div class="bg-white p-4 rounded-2xl border-2 border-emerald-100 shadow-sm">
+                        <span class="block text-xs font-bold text-slate-400 mb-1">📝 الشَّرْحُ وَالتَّوْضِيحُ:</span>
+                        <p id="explanation-text-para" class="text-lg font-bold text-slate-700 diacritics-lead leading-relaxed">
+                            ينطق حرف الألف بوضوح بالفتحة (أَ) وهو حرف رافس لا يمسك ما بعده.
+                        </p>
+                    </div>
+
+                    <!-- فقاعات تفكيك الكلمة -->
+                    <div class="bg-amber-50 p-4 rounded-2xl border-2 border-amber-200 shadow-sm">
+                        <span class="block text-xs font-bold text-amber-800 mb-2 text-center">🧩 فقاعات الحروف المفككة:</span>
+                        <div id="split-letters-area" class="flex flex-wrap justify-center gap-3 min-h-[50px] items-center">
+                            <!-- فقاعات الحروف -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // مصفوفة الحروف الـ 28 الكاملة مع مواقع الكتابة
+        const alphabetData = [
+            { char: "أ", name: "الأَلِفُ", start: "أ", mid: "ـأ", end: "ـأ" },
+            { char: "ب", name: "البَاءُ", start: "بـ", mid: "ـبـ", end: "ـب" },
+            { char: "ت", name: "التَّاءُ", start: "تـ", mid: "ـتـ", end: "ـت" },
+            { char: "ث", name: "الثَّاءُ", start: "ثـ", mid: "ـثـ", end: "ـث" },
+            { char: "ج", name: "الجِيمُ", start: "جـ", mid: "ـجـ", end: "ـج" },
+            { char: "ح", name: "الحَاءُ", start: "حـ", mid: "ـحـ", end: "ـح" },
+            { char: "خ", name: "الخَاءُ", start: "خـ", mid: "ـخـ", end: "ـخ" },
+            { char: "د", name: "الدَّالُ", start: "د", mid: "ـد", end: "ـد" },
+            { char: "ذ", name: "الذَّالُ", start: "ذ", mid: "ـذ", end: "ـذ" },
+            { char: "ر", name: "الرَّاءُ", start: "ر", mid: "ـر", end: "ـر" },
+            { char: "ز", name: "الزَّايُ", start: "ز", mid: "ـز", end: "ـز" },
+            { char: "س", name: "السِّينُ", start: "سـ", mid: "ـسـ", end: "ـس" },
+            { char: "ش", name: "الشِّينُ", start: "شـ", mid: "ـشـ", end: "ـش" },
+            { char: "ص", name: "الصَّادُ", start: "صـ", mid: "ـصـ", end: "ـص" },
+            { char: "ض", name: "الضَّادُ", start: "ضـ", mid: "ـضـ", end: "ـض" },
+            { char: "ط", name: "الطَّاءُ", start: "طـ", mid: "ـطـ", end: "ـط" },
+            { char: "ظ", name: "الظَّاءُ", start: "ظـ", mid: "ـظـ", end: "ـظ" },
+            { char: "ع", name: "العَيْنُ", start: "عـ", mid: "ـعـ", end: "ـع" },
+            { char: "غ", name: "الغَيْنُ", start: "غـ", mid: "ـغـ", end: "ـغ" },
+            { char: "ف", name: "الفَاءُ", start: "فـ", mid: "ـفـ", end: "ـف" },
+            { char: "ق", name: "القَافُ", start: "قـ", mid: "ـقـ", end: "ـق" },
+            { char: "ك", name: "الكَاكُ", start: "كـ", mid: "ـكـ", end: "ـك" },
+            { char: "ل", name: "اللاَّمُ", start: "لـ", mid: "ـلـ", end: "ـل" },
+            { char: "م", name: "المِيمُ", start: "مـ", mid: "ـمـ", end: "ـم" },
+            { char: "ن", name: "النُّونُ", start: "نـ", mid: "ـنـ", end: "ـن" },
+            { char: "هـ", name: "الهَاءُ", start: "هـ", mid: "ـهـ", end: "ـه" },
+            { char: "و", name: "الوَاوُ", start: "و", mid: "ـو", end: "ـو" },
+            { char: "ي", name: "اليَاءُ", start: "يـ", mid: "ـيـ", end: "ـي" }
+        ];
+
+        // قاعدة بيانات الأمثلة التوضيحية لكل حرف
+        const letterExamplesDB = {
+            "أ": [
+                { word: "أَسَدٌ", pos: "أول الكلمة منفصل", desc: "ينطق حرف الألف بوضوح بالفتحة (أَ) وهو حرف رافس لا يمسك ما بعده.", raw_letters: ["أ", "س", "د"] },
+                { word: "سَأَلَ", pos: "وسط الكلمة متصل", desc: "كتبت الهمزة على الألف لأنها مفتوحة وما قبلها مفتوح.", raw_letters: ["س", "أ", "ل"] }
+            ],
+            "ب": [
+                { word: "بَيْتٌ", pos: "أول الكلمة متصل", desc: "يمد الباء يده ليمسك بالياء لتسهيل قراءتها بشكل سلس.", raw_letters: ["ب", "ي", "ت"] },
+                { word: "جَبَلٌ", pos: "وسط الكلمة متصل", desc: "يتصل الباء في وسط الكلمة من الجهتين بمرونة تامة وسهولة.", raw_letters: ["ج", "ب", "ل"] }
+            ],
+            "ت": [
+                { word: "تُفَّاحٌ", pos: "أول الكلمة متصل", desc: "التاء مضمومة وتتصل بالـ فاء مباشرة في بداية الكلمة.", raw_letters: ["ت", "ف", "ا", "ح"] },
+                { word: "بَيْتٌ", pos: "آخر الكلمة منفصل", desc: "التاء هنا تاء مفتوحة وتأتي في آخر الكلمة منفصلة.", raw_letters: ["ب", "ي", "ت"] }
+            ],
+            "ث": [
+                { word: "ثَعْلَبٌ", pos: "أول الكلمة متصل", desc: "حرف لثوي تخرج فيه مقدمة اللسان ليتصل بالعين.", raw_letters: ["ث", "ع", "ل", "ب"] },
+                { word: "مُثَلَّثٌ", pos: "وسط الكلمة متصل", desc: "يتصل الثاء باللام السابقة والثاء المتطرفة الملحقة به.", raw_letters: ["م", "ث", "ل", "ث"] }
+            ],
+            "ج": [
+                { word: "جَمَلٌ", pos: "أول الكلمة متصل", desc: "يقص الجيم بطنه ليتصل بحرف الميم الذي يليه.", raw_letters: ["ج", "م", "ل"] },
+                { word: "شَجَرَةٌ", pos: "وسط الكلمة متصل", desc: "يمسك الشين من اليمين والراء من اليسار بمرونة تامة.", raw_letters: ["ش", "ج", "ر", "ة"] }
+            ],
+            "ح": [
+                { word: "حِصَانٌ", pos: "أول الكلمة متصل", desc: "الحاء مكسورة وتتصل بالصاد لتكوين مقطع ممدود.", raw_letters: ["ح", "ص", "ا", "ن"] },
+                { word: "لَحْمٌ", pos: "وسط الكلمة متصل", desc: "الحاء ساكنة وتتصل باللام والميم لتركيب كلمة لحم.", raw_letters: ["ل", "ح", "م"] }
+            ],
+            "خ": [
+                { word: "خَرُوفٌ", pos: "أول الكلمة متصل", desc: "الخاء مفتوحة وتتصل بالراء المضمومة مباشرة.", raw_letters: ["خ", "ر", "و", "ف"] },
+                { word: "مَطْبَخٌ", pos: "آخر الكلمة متصل", desc: "يتصل الخاء بالباء ويحتفظ ببطنه الكبيرة في نهاية الكلمة.", raw_letters: ["م", "ط", "ب", "خ"] }
+            ],
+            "د": [
+                { word: "دَرَّاجَةٌ", pos: "أول الكلمة منفصل", desc: "الدال حرف رافس لا يمسك ما بعده أبداً.", raw_letters: ["د", "ر", "ا", "ج", "ة"] },
+                { word: "مَدْرَسَةٌ", pos: "وسط الكلمة متصل", desc: "يمسك الميم قبله ولكنه يرفض الإمساك بالراء بعده.", raw_letters: ["م", "د", "ر", "س", "ة"] }
+            ],
+            "ذ": [
+                { word: "ذَهَبٌ", pos: "أول الكلمة منفصل", desc: "حرف لثوي ورافس يكتب منفصلاً عن الهاء تماماً.", raw_letters: ["ذ", "ه", "ب"] },
+                { word: "مِذْياعٌ", pos: "وسط الكلمة متصل", desc: "يتصل بالميم التي تسبقه فقط ويرفض الاتصال بالياء.", raw_letters: ["م", "ذ", "ي", "ا", "ع"] }
+            ],
+            "ر": [
+                { word: "رُمَّانٌ", pos: "أول الكلمة منفصل", desc: "الراء حرف رافس لا يمسك الميم التي بعده.", raw_letters: ["ر", "م", "ا", "ن"] },
+                { word: "بَرْدٌ", pos: "وسط الكلمة متصل", desc: "يمسك الباء قبله ويرفض الإمساك بالدال بعده.", raw_letters: ["ب", "ر", "د"] }
+            ],
+            "ز": [
+                { word: "زَرَافَةٌ", pos: "أول الكلمة منفصل", desc: "الزاي مضمومة وتكتب منفصلة عما بعدها من حروف.", raw_letters: ["ز", "ر", "ا", "ف", "ة"] },
+                { word: "مَزْرَعَةٌ", pos: "وسط الكلمة متصل", desc: "يمسك الميم ويرفض الإمساك بالراء التالية.", raw_letters: ["م", "ز", "ر", "ع", "ة"] }
+            ],
+            "س": [
+                { word: "سَمَكَةٌ", pos: "أول الكلمة متصل", desc: "يمد السين أسنانها لتمسك بالـ ميم لتسهيل القراءة.", raw_letters: ["س", "م", "ك", "ة"] },
+                { word: "جِسْرٌ", pos: "وسط الكلمة متصل", desc: "يمسك الجيم والراء لربط الكلمة بالكامل ببعضها.", raw_letters: ["ج", "س", "ر"] }
+            ],
+            "ش": [
+                { word: "شَمْسٌ", pos: "أول الكلمة متصل", desc: "يتصل الشين بالميم الساكنة بعدها لتكوين كلمة شمس.", raw_letters: ["ش", "م", "س"] },
+                { word: "عُشٌّ", pos: "آخر الكلمة متصل", desc: "يتصل بالعين ويغلق الكلمة بشكل الشين الكاملة.", raw_letters: ["ع", "ش"] }
+            ],
+            "ص": [
+                { word: "صَقْرٌ", pos: "أول الكلمة متصل", desc: "يتصل الصاد مباشرة بالقاف الساكنة بمد ذراعه.", raw_letters: ["ص", "ق", "ر"] },
+                { word: "عَصِيرٌ", pos: "وسط الكلمة متصل", desc: "يتصل بالعين والياء لمد الصوت بالكسرة الطويلة.", raw_letters: ["ع", "ص", "ي", "ر"] }
+            ],
+            "ض": [
+                { word: "ضَفْدَعٌ", pos: "أول الكلمة متصل", desc: "يتصل الضاد بالفاء مباشرة بمد ذراعه لتكوين الكلمة.", raw_letters: ["ض", "ف", "د", "ع"] },
+                { word: "مَرِيضٌ", pos: "آخر الكلمة منفصل", desc: "يكتب منفرداً ومستقلاً لأن ما قبله حرف الياء المدية.", raw_letters: ["م", "ر", "ي", "ض"] }
+            ],
+            "ط": [
+                { word: "طَبِيبٌ", pos: "أول الكلمة متصل", desc: "يتصل الطاء بالباء المفتوحة لتشكيل بداية الكلمة.", raw_letters: ["ط", "ب", "ي", "ب"] },
+                { word: "قِطَّارٌ", pos: "وسط الكلمة متصل", desc: "الطاء مشددة ومفتوحة وتتصل بالقاف والألف لمد الصوت.", raw_letters: ["ق", "ط", "ا", "ر"] }
+            ],
+            "ظ": [
+                { word: "ظَرْفٌ", pos: "أول الكلمة متصل", desc: "يتصل الظاء بالراء الساكنة التي تليها مباشرة.", raw_letters: ["ظ", "ر", "ف"] },
+                { word: "مِظَلَّةٌ", pos: "وسط الكلمة متصل", desc: "تمسك بالميم واللام لتسهيل النطق لطلابنا.", raw_letters: ["م", "ظ", "ل", "ة"] }
+            ],
+            "ع": [
+                { word: "عَصْفُورٌ", pos: "أول الكلمة متصل", desc: "يكتب برأس مفتوحة ويتصل بالصاد الساكنة.", raw_letters: ["ع", "ص", "ف", "و", "ر"] },
+                { word: "شَمْعَةٌ", pos: "وسط الكلمة متصل", desc: "يطمس رأس العين في وسط الكلمة عندما يتصل من الجهتين.", raw_letters: ["ش", "م", "ع", "ة"] }
+            ],
+            "غ": [
+                { word: "غَزَالٌ", pos: "أول الكلمة متصل", desc: "يتصل الغين بالزاي المفتوحة بقوة لتكوين بداية الكلمة.", raw_letters: ["غ", "ز", "ا", "ل"] },
+                { word: "صَمْغٌ", pos: "آخر الكلمة متصل", desc: "يتصل بالميم قبله محتفظاً بنصف دائرته الكبيرة.", raw_letters: ["ص", "م", "غ"] }
+            ],
+            "ف": [
+                { word: "فَرَاشَةٌ", pos: "أول الكلمة متصل", desc: "تتصل الفاء بالراء المفتوحة مباشرة وبسلاسة.", raw_letters: ["ف", "ر", "ا", "ش", "ة"] },
+                { word: "سَقْفٌ", pos: "آخر الكلمة متصل", desc: "تغلق الفاء الكلمة وتتصل بالقاف السابقة لها.", raw_letters: ["س", "ق", "ف"] }
+            ],
+            "ق": [
+                { word: "قَلَمٌ", pos: "أول الكلمة متصل", desc: "تتصل القاف باللام وتوضع فوقها نقطتان بوضوح.", raw_letters: ["ق", "ل", "م"] },
+                { word: "حَقِيبَةٌ", pos: "وسط الكلمة متصل", desc: "تمسك بالحاء والياء في انسيابية تامة.", raw_letters: ["ح", "ق", "ي", "ب", "ة"] }
+            ],
+            "ك": [
+                { word: "كِتَابٌ", pos: "أول الكلمة متصل", desc: "يتغير شكل الكاف تماماً في أول الكلمة لتصبح مائلة ومفتوحة.", raw_letters: ["ك", "ت", "ا", "ب"] },
+                { word: "سَمَكَةٌ", pos: "وسط الكلمة متصل", desc: "تتصل بالميم السابقة والتاء المربوطة اللاحقة.", raw_letters: ["س", "م", "ك", "ة"] }
+            ],
+            "ل": [
+                { word: "لَعْبَةٌ", pos: "أول الكلمة متصل", desc: "تمد اللام ذراعها لتمسك بالعين الساكنة.", raw_letters: ["ل", "ع", "ب", "ة"] },
+                { word: "قَلَمٌ", pos: "وسط الكلمة متصل", desc: "تتصل بالقاف من اليمين وبالميم من اليسار.", raw_letters: ["ق", "ل", "م"] }
+            ],
+            "م": [
+                { word: "مَسْجِدٌ", pos: "أول الكلمة متصل", desc: "تكتب الميم دائرية صغيرة وتتصل بالسين الساكنة.", raw_letters: ["م", "س", "ج", "د"] },
+                { word: "قَمَرٌ", pos: "وسط الكلمة متصل", desc: "تتوسط القاف والراء لتسهيل جريان الكلمة الصوتي.", raw_letters: ["ق", "م", "ر"] }
+            ],
+            "ن": [
+                { word: "نَجْمَةٌ", pos: "أول الكلمة متصل", desc: "تكتب النون كسنّة صغيرة فوقها نقطة وتتصل بالجيم.", raw_letters: ["ن", "ج", "م", "ة"] },
+                { word: "عِنَبٌ", pos: "وسط الكلمة متصل", desc: "تتصل بالعين السابقة والباء اللاحقة لتشكيل وسط الكلمة.", raw_letters: ["ع", "ن", "ب"] }
+            ],
+            "هـ": [
+                { word: "هلالٌ", pos: "أول الكلمة متصل", desc: "تكتب الهاء بشكلها الدائري المحتضن لدائرة أخرى.", raw_letters: ["هـ", "ل", "ا", "ل"] },
+                { word: "وَجْهٌ", pos: "آخر الكلمة متصل", desc: "تكتب كدائرة صغيرة متصلة بما قبلها.", raw_letters: ["و", "ج", "ه"] }
+            ],
+            "و": [
+                { word: "وَلَدٌ", pos: "أول الكلمة منفصل", desc: "الواو حرف رافس يتصل بما قبله فقط ولا يتصل بما بعده.", raw_letters: ["و", "ل", "د"] },
+                { word: "دَلْوٌ", pos: "آخر الكلمة منفصل", desc: "أتى الواو في نهاية الكلمة مستقلاً لعدم اتصاله باللام.", raw_letters: ["د", "ل", "و"] }
+            ],
+            "ي": [
+                { word: "يَدٌ", pos: "أول الكلمة متصل", desc: "تكتب الياء بنقطتين في الأسفل وتتصل بالدال المفتوحة.", raw_letters: ["ي", "د"] },
+                { word: "بَيْتٌ", pos: "وسط الكلمة متصل", desc: "تتوسط الباء والتاء لتسهيل اللفظ الصوتي.", raw_letters: ["ب", "ي", "ت"] }
+            ]
+        };
+
+        let activeChar = "أ";
+        let activeExampleIdx = 0;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderAlphabetGrid();
+            selectLetter("أ");
+        });
+
+        // رسم شبكة الحروف الـ 28
+        function renderAlphabetGrid() {
+            const grid = document.getElementById('alphabet-cards-grid');
+            grid.innerHTML = '';
+
+            alphabetData.forEach(item => {
+                const card = document.createElement('button');
+                const isSelected = item.char === activeChar;
+                card.className = `p-3 rounded-2xl border-2 font-black text-center letter-hover-card shadow-sm flex flex-col items-center justify-center ${
+                    isSelected 
+                    ? 'bg-amber-500 text-white border-amber-700 shadow-md ring-4 ring-amber-300' 
+                    : 'bg-white text-amber-900 border-amber-200 hover:bg-amber-100'
+                }`;
+                card.onclick = () => selectLetter(item.char);
+                card.innerHTML = `
+                    <span class="text-3xl mb-1 diacritics-lead">${item.char}</span>
+                    <span class="text-[10px] font-bold tracking-tighter opacity-80">${item.start} | ${item.mid} | ${item.end}</span>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // اختيار حرف محدد
+        function selectLetter(char) {
+            activeChar = char;
+            activeExampleIdx = 0;
+            renderAlphabetGrid();
+
+            const item = alphabetData.find(a => a.char === char);
+            if (!item) return;
+
+            document.getElementById('selected-letter-badge').innerText = item.char;
+            document.getElementById('selected-letter-heading').innerText = `حَرْفُ ${item.name} ( ${item.char} )`;
+            document.getElementById('selected-letter-positions').innerText = `أشكال الكتابة: ${item.start} | ${item.mid} | ${item.end}`;
+
+            updateExampleView();
+        }
+
+        // تحديث واجهة المثال الحالي
+        function updateExampleView() {
+            const examples = letterExamplesDB[activeChar] || [
+                { word: activeChar + "َـفْـتَـرٌ", pos: "أول الكلمة", desc: "مثال توضيحي لكتابة هذا الحرف الجميل.", raw_letters: [activeChar, "ف", "ت", "ر"] }
+            ];
+
+            if (activeExampleIdx >= examples.length) activeExampleIdx = 0;
+            const ex = examples[activeExampleIdx];
+
+            document.getElementById('pos-badge-tag').innerText = `موضع الحرف: ${ex.pos}`;
+            document.getElementById('display-word-text').innerText = ex.word;
+            document.getElementById('explanation-text-para').innerText = ex.desc;
+
+            // تفكيك فقاعات الكلمة
+            splitDisplayWord();
+        }
+
+        // تفكيك الكلمة إلى فقاعات
+        function splitDisplayWord() {
+            const examples = letterExamplesDB[activeChar] || [
+                { word: activeChar + "َـفْـتَـرٌ", pos: "أول الكلمة", desc: "مثال توضيحي لكتابة هذا الحرف الجميل.", raw_letters: [activeChar, "ف", "ت", "ر"] }
+            ];
+            const ex = examples[activeExampleIdx];
+            const container = document.getElementById('split-letters-area');
+            container.innerHTML = '';
+
+            const colors = ['bg-sky-500', 'bg-emerald-500', 'bg-amber-500', 'bg-rose-500', 'bg-purple-500'];
+
+            ex.raw_letters.forEach((char, idx) => {
+                const bubble = document.createElement('div');
+                const c = colors[idx % colors.length];
+                bubble.className = `w-11 h-11 rounded-2xl ${c} text-white font-black text-xl flex items-center justify-center border-b-4 shadow-md bubble-animate diacritics-lead`;
+                bubble.style.animationDelay = `${idx * 0.07}s`;
+                bubble.innerText = char;
+                container.appendChild(bubble);
+            });
+        }
+
+        // نطق الحرف والكلمة الحالية
+        function speakSelectedLetter() {
+            const examples = letterExamplesDB[activeChar];
+            const exWord = (examples && examples[activeExampleIdx]) ? examples[activeExampleIdx].word : activeChar;
+            const textToSpeak = `حرف ${activeChar}، ${exWord}`;
+
+            if (!('speechSynthesis' in window)) {
+                alert("متصفحك لا يدعم خاصية نطق النصوص.");
+                return;
+            }
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.lang = 'ar-SA';
+            utterance.rate = 0.85; // سرعة نطق 0.85
+            utterance.pitch = 1.0;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // التدوير للمثال التالي
+        function cycleNextExample() {
+            const examples = letterExamplesDB[activeChar];
+            if (examples && examples.length > 1) {
+                activeExampleIdx = (activeExampleIdx + 1) % examples.length;
+                updateExampleView();
+            } else {
+                alert(`هذا هو المثال المتوفر لحرف (${activeChar})، يمكنك الانتقال لحرف آخر! ✨`);
+            }
+        }
+    </script>
+</body>
+</html>
